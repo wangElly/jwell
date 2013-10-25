@@ -109,4 +109,8 @@ public class SimpleLogger implements Logger {
         print(msg, null, obj);
     }
 
+    public boolean isDebugEnabled() {
+        return true;
+    }
+
 }

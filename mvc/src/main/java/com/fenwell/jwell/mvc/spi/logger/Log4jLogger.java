@@ -82,4 +82,8 @@ public class Log4jLogger implements Logger {
         logger.debug(str);
     }
 
+    public boolean isDebugEnabled() {
+        return logger.isDebugEnabled();
+    }
+
 }

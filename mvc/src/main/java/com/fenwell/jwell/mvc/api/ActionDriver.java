@@ -26,7 +26,7 @@ public abstract class ActionDriver {
 
     private static final Logger log = Logs.getLogger();
 
-    private static final Map<String, ActionContent> actions = new HashMap<String, ActionContent>();
+    protected static final Map<String, ActionContent> actions = new HashMap<String, ActionContent>();
 
     private static final String METHOD_GET = "GET";
     private static final String METHOD_POST = "POST";
@@ -131,7 +131,7 @@ public abstract class ActionDriver {
         }
     }
 
-    private void resolveAction(List<Class<?>> allCls) {
+    protected void resolveAction(List<Class<?>> allCls) {
         if (Collections.isEmpty(allCls)) {
             return;
         }
@@ -140,7 +140,7 @@ public abstract class ActionDriver {
         }
     }
 
-    private void resolveAction(Class<?> cls) {
+    protected void resolveAction(Class<?> cls) {
         Action act = cls.getAnnotation(Action.class);
         Method[] methods = cls.getDeclaredMethods();
         if (Arrays.isEmpty(methods)) {
@@ -162,11 +162,11 @@ public abstract class ActionDriver {
         }
     }
 
-    private ActionContent createActionContent(Action parent, Action act, Method mtd, Class<?> cls) {
+    protected ActionContent createActionContent(Action parent, Action act, Method mtd, Class<?> cls) {
         String split = Strings.defVal(Mvcs.get(Mvcs.CONFIG_MVC).getString("split"), "/");
         StringBuffer uri = new StringBuffer(32);
         if (parent != null) {
-            uri.append(split).append(parent.value());
+            uri.append("/").append(parent.value());
         }
         uri.append(split).append(act.value());
         MethodType mtdType = act.methodType();

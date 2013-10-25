@@ -94,4 +94,8 @@ public class AdapterLogger implements Logger {
         logger.debugf(msg, obj);
     }
 
+    public boolean isDebugEnabled() {
+        return logger.isDebugEnabled();
+    }
+
 }

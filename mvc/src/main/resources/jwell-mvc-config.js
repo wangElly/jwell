@@ -11,7 +11,3 @@ var mvc = {
     split : "/",
     encode : "UTF-8"
 };
-
-var methodReflect = {
-    
-};

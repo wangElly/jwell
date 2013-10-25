@@ -129,7 +129,8 @@ public class ClassScanHandler implements ScanHandler {
         try {
             cls = Class.forName(name);
         } catch (Throwable e) {
-            log.debugf("Can not load class [%s]", name);
+            if (log.isDebugEnabled())
+                log.debugf("Can not load class [%s]", name);
         }
         return cls;
     }

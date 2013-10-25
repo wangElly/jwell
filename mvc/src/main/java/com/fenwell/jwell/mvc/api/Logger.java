@@ -33,5 +33,7 @@ public interface Logger {
     public void debug(String msg, Throwable t);
 
     public void debugf(String msg, Object... obj);
-
+    
+    public boolean isDebugEnabled();
+    
 }
