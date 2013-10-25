@@ -20,7 +20,6 @@ public class ClassScanHandler implements ScanHandler {
 
     private static final Logger log = Logs.getLogger();
 
-    @SuppressWarnings("unchecked")
     public List<Class<?>> scan(List<String> packs) {
 
         if (Collections.isEmpty(packs)) {
