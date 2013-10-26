@@ -6,10 +6,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 public abstract class MyBatisTemplate {
-    
-    public MyBatisTemplate(){
+
+    public MyBatisTemplate() {
     }
-    
+
     protected static final ThreadLocal<SqlSession> session = new ThreadLocal<SqlSession>();
 
     protected static final ThreadLocal<Boolean> isTran = new ThreadLocal<Boolean>();
@@ -20,7 +20,7 @@ public abstract class MyBatisTemplate {
         this.sessionFactory = ssf;
     }
 
-    public void setTransaction(boolean flag) {
+    public static void setTransaction(boolean flag) {
         isTran.set(flag);
     }
 
@@ -81,7 +81,11 @@ public abstract class MyBatisTemplate {
         }
         return result;
     }
-    
+
+    public static SqlSession getCurrentSession() {
+        return session.get();
+    }
+
     public SqlSession getSession() {
         SqlSession sess = null;
         if (isTran.get() == null || !isTran.get()) {
@@ -105,8 +109,10 @@ public abstract class MyBatisTemplate {
 
     public void commit() {
         SqlSession sess = getSession();
-        sess.commit();
-        sess.close();
+        if (sess != null) {
+            sess.commit();
+            sess.close();
+        }
     }
 
 }
