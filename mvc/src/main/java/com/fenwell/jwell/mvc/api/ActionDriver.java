@@ -20,6 +20,8 @@ import com.fenwell.jwell.mvc.api.enums.MethodType;
 import com.fenwell.jwell.mvc.api.model.ActionContent;
 import com.fenwell.jwell.utils.Arrays;
 import com.fenwell.jwell.utils.Collections;
+import com.fenwell.jwell.utils.Maps;
+import com.fenwell.jwell.utils.Reflects;
 import com.fenwell.jwell.utils.Strings;
 
 public abstract class ActionDriver {
@@ -39,9 +41,9 @@ public abstract class ActionDriver {
      * 页面不存在
      */
     private static final int PAGE_404 = 404;
-    
+
     /**
-     * 方法不被允许 
+     * 方法不被允许
      */
     private static final int PAGE_405 = 405;
 
@@ -72,7 +74,7 @@ public abstract class ActionDriver {
             if (mt != reqMT) {
                 String msg = "HTTP method GET is not supported by this URL";
                 response.setStatus(PAGE_405, msg);
-                return ;
+                return;
             }
         }
         Object interResult = doInterceptor(request, response, act.getInterceptors());
@@ -142,7 +144,7 @@ public abstract class ActionDriver {
 
     protected void resolveAction(Class<?> cls) {
         Action act = cls.getAnnotation(Action.class);
-        Method[] methods = cls.getDeclaredMethods();
+        Method[] methods = Reflects.getMethods(cls);
         if (Arrays.isEmpty(methods)) {
             return;
         }
@@ -157,6 +159,8 @@ public abstract class ActionDriver {
                     log.infof("Scan to action -> %s%s & method -> %s & method type -> %s",
                             ac.getUri(), suffix, mtdName, mtdType);
                     actions.put(ac.getUri(), ac);
+                    Object instance = getInstance(cls);
+                    ac.setInstance(instance);
                 }
             }
         }
@@ -186,6 +190,31 @@ public abstract class ActionDriver {
         ac.setMethodType(mtdType);
         ac.setParamClass(paramClass);
         return ac;
+    }
+
+    protected Object getInstance(Class<?> cls) {
+        if (Maps.isEmpty(actions)) {
+            return null;
+        }
+        Object instance = null;
+        for (ActionContent ac : actions.values()) {
+            if (ac.getClasz().equals(cls)) {
+                instance = ac.instance();
+                if (instance != null) {
+                    return instance;
+                } else {
+                    break;
+                }
+            }
+        }
+        if (instance == null) {
+            try {
+                instance = Reflects.createBean(cls);
+            } catch (Exception e) {
+                // skip
+            }
+        }
+        return instance;
     }
 
     private Param[] createParamAnnotation(Method mtd) {

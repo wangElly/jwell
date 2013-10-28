@@ -1,5 +1,7 @@
 package com.fenwell.jwell.mvc.spi.resolve;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fenwell.jwell.mvc.Config;
 import com.fenwell.jwell.mvc.Mvcs;
 import com.fenwell.jwell.mvc.api.Resolve;
+import com.fenwell.jwell.utils.Collections;
 import com.fenwell.jwell.utils.Jsons;
 import com.fenwell.jwell.utils.Strings;
 
@@ -17,10 +20,24 @@ public class JsonResolve implements Resolve {
             return;
         }
         String jsonFile = Jsons.removeComment(file);
-        Config loader = setConfig(Mvcs.CONFIG_LOADER, jsonFile);
-        Config mvc = setConfig(Mvcs.CONFIG_MVC, jsonFile);
-        ctx.set(Mvcs.CONFIG_LOADER, loader);
-        ctx.set(Mvcs.CONFIG_MVC, mvc);
+        List<String> keys = getKey(jsonFile);
+        if (Collections.isEmpty(keys)) {
+            return;
+        }
+        for (String key : keys) {
+            Config conf = setConfig(key, jsonFile);
+            ctx.set(key, conf);
+        }
+    }
+
+    private List<String> getKey(String jsonFile) {
+        List<String> keys = new ArrayList<String>();
+        String regex = "var ([\\w\\$]+?)\\s*=";
+        Matcher matcher = Pattern.compile(regex).matcher(jsonFile);
+        while (matcher.find()) {
+            keys.add(matcher.group(1));
+        }
+        return keys;
     }
 
     private Config setConfig(String key, String jsonFile) {

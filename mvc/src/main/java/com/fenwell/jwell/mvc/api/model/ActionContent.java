@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import com.fenwell.jwell.mvc.api.Interceptor;
 import com.fenwell.jwell.mvc.api.annotation.Param;
 import com.fenwell.jwell.mvc.api.enums.MethodType;
-import com.fenwell.jwell.utils.Reflects;
 
 public class ActionContent {
 
@@ -81,10 +80,11 @@ public class ActionContent {
         this.paramAnnotation = paramAnnotation;
     }
 
-    public Object instance() throws InstantiationException, IllegalAccessException {
-        if (instance == null) {
-            instance = Reflects.createBean(clasz);
-        }
+    public void setInstance(Object instance) {
+        this.instance = instance;
+    }
+
+    public Object instance() {
         return instance;
     }
 
