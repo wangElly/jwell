@@ -1,3 +1,9 @@
+/**
+ * bug 和问题太多了。。 
+ * 
+ * 都是最初设计的问题，要不要重构呢？
+ */
+
 var loader = {
     "com.fenwell.jwell.mvc.api.Loader" : "com.fenwell.jwell.mvc.spi.loader.DefaultClassLoader",
     "com.fenwell.jwell.mvc.api.ActionDriver" : "com.fenwell.jwell.mvc.spi.action.MapperActionDriver",
