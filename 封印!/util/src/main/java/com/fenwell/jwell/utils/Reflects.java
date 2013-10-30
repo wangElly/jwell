@@ -1,6 +1,7 @@
 package com.fenwell.jwell.utils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,6 +117,16 @@ public class Reflects {
         return t;
     }
 
+    public static Method[] getMethods(Class<?> cls) {
+        Method[] mtds = null;
+        try {
+            mtds = cls.getDeclaredMethods();
+        } catch (Throwable e) {
+            return new Method[0];
+        }
+        return mtds;
+    }
+
     public static <T> T makeClass(Class<T> cls, Class<?>[] clsType, Object[] param) {
         T t = null;
         try {
@@ -130,7 +141,7 @@ public class Reflects {
         }
         return t;
     }
-    
+
     public static String convertDefault(Class<?> cls) {
         if (cls.isPrimitive()) {
             if (cls.equals(int.class) || cls.equals(short.class) || cls.equals(byte.class)) {

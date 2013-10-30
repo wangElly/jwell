@@ -28,6 +28,7 @@ import com.fenwell.jwell.mybatis.suport.annotation.operate.Select;
 import com.fenwell.jwell.mybatis.suport.annotation.operate.Update;
 import com.fenwell.jwell.mybatis.suport.api.BeanFactory;
 import com.fenwell.jwell.utils.Arrays;
+import com.fenwell.jwell.utils.Javassists;
 import com.fenwell.jwell.utils.Maps;
 import com.fenwell.jwell.utils.Reflects;
 import com.fenwell.jwell.utils.Strings;
@@ -239,7 +240,7 @@ public class DefaultBeanFactory implements BeanFactory {
         } else if (paramCls.length == 1) {
             Class<?> cls = paramCls[0];
             if (cls.isPrimitive()) {
-                return "Object param$value = " + primitive2Wrap(cls, 1) + ";\r";
+                return "Object param$value = " + Javassists.primitive2Wrap(cls, 1) + ";\r";
             } else {
                 return "Object param$value = $1;\r";
             }
@@ -271,7 +272,7 @@ public class DefaultBeanFactory implements BeanFactory {
                     Class<?> cls = mtd.getParameterTypes()[id - 1];
                     code.append("param$value.put(\"").append(p.value()).append("\",");
                     if (cls.isPrimitive()) {
-                        code.append(primitive2Wrap(cls, id));
+                        code.append(Javassists.primitive2Wrap(cls, id));
                     } else {
                         code.append("$").append(id);
                     }
@@ -282,34 +283,6 @@ public class DefaultBeanFactory implements BeanFactory {
         }
     }
 
-    /**
-     * 将基本数据类型转换成包装类型
-     * 
-     * @param type
-     * @param index
-     * @return
-     */
-    private String primitive2Wrap(Class<?> type, int index) {
-        if (type.equals(int.class)) {
-            return "new Integer($" + index + ")";
-        } else if (type.equals(long.class)) {
-            return "new Long($" + index + ")";
-        } else if (type.equals(short.class)) {
-            return "new Short($" + index + ")";
-        } else if (type.equals(byte.class)) {
-            return "new Byte($" + index + ")";
-        } else if (type.equals(float.class)) {
-            return "new Float($" + index + ")";
-        } else if (type.equals(double.class)) {
-            return "new Double($" + index + ")";
-        } else if (type.equals(char.class)) {
-            return "new Character($" + index + ")";
-        } else if (type.equals(char.class)) {
-            return "new Boolean($" + index + ")";
-        } else {
-            return "null";
-        }
-    }
 
     private String makeMyBatisId(Namespace namespace, String value, Class<?> cls, Method mtd) {
         String id = Strings.EMPTY;
