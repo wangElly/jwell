@@ -1,6 +1,5 @@
-util 是jwell的工具库，mvc和mybatis-suport都依赖于util<br >
-mybatis-suport 是jwell对mybatis的一个支持库<br >
-<br >
-每个工程都是maven构建，如果不想用maven可以直接用lib下的jar包<br >
-pom.xml 是maven描述文件<br >
-src文件夹是源代码<br >
+<h1>关于封印！</h1>
+<p>原来写的jwell中BUG太多，当初设计的问题，现在进行重构，理论想法不变，结合spring开发，由spring管理bean.. </p>
+<p>原项目进行封印，其中的代码仅供参考，吸取教训！</p>
+<h1>新项目！</h1>
+<p>嗯。。 先开发，开发完在写吧！</p>
