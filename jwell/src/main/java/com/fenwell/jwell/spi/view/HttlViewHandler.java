@@ -23,6 +23,10 @@ public class HttlViewHandler implements ViewHandler {
     public void execute(HttpServletRequest request, HttpServletResponse response, Object obj)
             throws Exception {
 
+        if (obj == null) {
+            return;
+        }
+
         response.setCharacterEncoding(encode);
         response.setContentType("text/html;charset=" + encode);
 
