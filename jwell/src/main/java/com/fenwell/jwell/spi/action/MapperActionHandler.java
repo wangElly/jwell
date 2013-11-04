@@ -28,6 +28,11 @@ import com.fenwell.util.Arrays;
 import com.fenwell.util.Maps;
 import com.fenwell.util.Strings;
 
+/**
+ * 此类太过冗余和复杂，准备重构
+ * @author Wang12
+ *
+ */
 public class MapperActionHandler implements ActionHandler {
 
     /**
