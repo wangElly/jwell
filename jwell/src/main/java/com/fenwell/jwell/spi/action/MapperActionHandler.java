@@ -29,7 +29,7 @@ import com.fenwell.util.Maps;
 import com.fenwell.util.Strings;
 
 /**
- * 此类太过冗余和复杂，准备重构
+ * 代码太过冗余和复杂，准备重构
  * @author Wang12
  *
  */
