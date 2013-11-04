@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
@@ -30,10 +32,13 @@ import com.fenwell.util.Strings;
 
 /**
  * 代码太过冗余和复杂，准备重构
+ * 
  * @author Wang12
- *
+ * 
  */
 public class MapperActionHandler implements ActionHandler {
+
+    private static final Log log = LogFactory.getLog(MapperActionHandler.class);
 
     /**
      * 404 页面不存在
@@ -281,6 +286,9 @@ public class MapperActionHandler implements ActionHandler {
             String uri = makeURI(parentURI, childURI);
             ActionContent ac = makeActionContent(parent, child, mtd, obj);
             actions.put(uri, ac);
+            String msg = String.format("Scan action -> %s%s method type is %s invoke method in %s",
+                    uri, urlSuffix, child.type(), mtd);
+            log.info(msg);
         }
     }
 
