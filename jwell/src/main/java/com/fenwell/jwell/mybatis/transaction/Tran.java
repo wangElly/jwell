@@ -24,8 +24,9 @@ public class Tran {
             session.commit();
         } catch (Throwable t) {
             session.rollback();
+        } finally {
+            closeSession(session);
         }
-        closeSession(session);
         return result == null ? null : ((T) result);
     }
 
@@ -52,9 +53,7 @@ public class Tran {
             log.warn("session is null ,cannot close this !");
             return;
         }
-        session.commit();
         session.close();
-        
         if (!isTran()) {
             // 关闭事务
             sessionHolder.remove();
