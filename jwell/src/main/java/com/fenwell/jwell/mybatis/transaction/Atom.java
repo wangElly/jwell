@@ -1,7 +1,13 @@
 package com.fenwell.jwell.mybatis.transaction;
 
-public interface Atom {
-    
-    public Object execute() throws Throwable;
+public abstract class Atom {
+
+    public void commit() {
+    }
+
+    public void rollback() {
+    }
+
+    public abstract Object execute() throws Throwable;
 
 }
