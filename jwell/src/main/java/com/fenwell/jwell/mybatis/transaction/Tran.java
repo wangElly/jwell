@@ -25,7 +25,9 @@ public class Tran {
         } catch (Throwable t) {
             session.rollback();
         } finally {
-            closeSession(session);
+            session.close();
+            sessionHolder.remove();
+            isTransaction.remove();
         }
         return result == null ? null : ((T) result);
     }
@@ -44,25 +46,21 @@ public class Tran {
         return session;
     }
 
+    public static void closeSession(SqlSession session) {
+        if (!isTran()) {
+            session.commit();
+            session.close();
+        }
+    }
+
     private static boolean isTran() {
         return isTransaction.get() == null ? false : isTransaction.get();
     }
 
-    public static void closeSession(SqlSession session) {
-        if (session == null) {
-            log.warn("session is null ,cannot close this !");
-            return;
+    public static void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+        if (Tran.sqlSessionFactory == null) {
+            Tran.sqlSessionFactory = sqlSessionFactory;
         }
-        session.close();
-        if (!isTran()) {
-            // 关闭事务
-            sessionHolder.remove();
-            isTransaction.remove();
-        }
-    }
-
-    public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-        Tran.sqlSessionFactory = sqlSessionFactory;
     }
 
 }
