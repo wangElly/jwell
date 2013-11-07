@@ -23,6 +23,7 @@ public class Tran {
             result = atom.execute();
             session.commit();
         } catch (Throwable t) {
+            log.warn(t.getMessage(), t);
             session.rollback();
         } finally {
             session.close();
