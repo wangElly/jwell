@@ -88,6 +88,14 @@ public class MyBatisProxy implements MethodInterceptor {
         return null;
     }
 
+    /**
+     * 执行insert 方法
+     * 
+     * @param id
+     * @param mtd
+     * @param param
+     * @return
+     */
     private boolean doInsert(String id, Method mtd, Object param) {
         SqlSession session = Tran.getSession();
         boolean result = false;
