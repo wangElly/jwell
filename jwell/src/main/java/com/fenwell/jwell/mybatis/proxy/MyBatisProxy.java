@@ -37,11 +37,10 @@ public class MyBatisProxy implements MethodInterceptor {
         String id = getId(an, target, mtd);
         if (an instanceof Insert) {
             result = doInsert(id, mtd, param);
-            System.out.println("增加");
         } else if (an instanceof Delete) {
-            System.out.println("删除");
+            result = doDelete(id, mtd, param);
         } else if (an instanceof Update) {
-            System.out.println("修改");
+            result = doUpdate(id, mtd, param);
         } else if (an instanceof SelectOne) {
             System.out.println("查询一个");
         } else if (an instanceof SelectList) {
@@ -96,14 +95,23 @@ public class MyBatisProxy implements MethodInterceptor {
      * @param param
      * @return
      */
-    private boolean doInsert(String id, Method mtd, Object param) {
+    private Object doInsert(String id, Method mtd, Object param) {
         SqlSession session = Tran.getSession();
-        boolean result = false;
-        if (param == null) {
-            result = session.insert(id) > 0;
-        } else {
-            result = session.insert(id, param) > 0;
-        }
+        boolean result = session.insert(id, param) > 0;
+        Tran.closeSession(session);
+        return result;
+    }
+
+    private Object doUpdate(String id, Method mtd, Object param) {
+        SqlSession session = Tran.getSession();
+        boolean result = session.update(id, param) > 0;
+        Tran.closeSession(session);
+        return result;
+    }
+
+    private Object doDelete(String id, Method mtd, Object param) {
+        SqlSession session = Tran.getSession();
+        boolean result = session.delete(id, param) > 0;
         Tran.closeSession(session);
         return result;
     }
