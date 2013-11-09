@@ -2,6 +2,9 @@ package com.fenwell.jwell.mybatis.proxy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -13,12 +16,15 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.fenwell.jwell.mybatis.annotation.Delete;
 import com.fenwell.jwell.mybatis.annotation.Insert;
+import com.fenwell.jwell.mybatis.annotation.Key;
 import com.fenwell.jwell.mybatis.annotation.Namespace;
 import com.fenwell.jwell.mybatis.annotation.SQL;
 import com.fenwell.jwell.mybatis.annotation.SelectList;
 import com.fenwell.jwell.mybatis.annotation.SelectOne;
 import com.fenwell.jwell.mybatis.annotation.Update;
 import com.fenwell.jwell.mybatis.transaction.Tran;
+import com.fenwell.util.Arrays;
+import com.fenwell.util.Maps;
 import com.fenwell.util.Strings;
 
 public class MyBatisProxy implements MethodInterceptor {
@@ -33,7 +39,7 @@ public class MyBatisProxy implements MethodInterceptor {
             return null;
         }
         Object result = null;
-        Object param = makeParam();
+        Object param = makeParam(mtd, args);
         String id = getId(an, target, mtd);
         if (an instanceof Insert) {
             result = doInsert(id, mtd, param);
@@ -83,8 +89,28 @@ public class MyBatisProxy implements MethodInterceptor {
         return Strings.isEmpty(ns) ? id : ns + "." + id;
     }
 
-    private Map<String, Object> makeParam() {
-        return null;
+    private Object makeParam(Method mtd, Object[] args) {
+        if (Arrays.isEmpty(args)) {
+            return null;
+        }
+        Annotation[][] anns = mtd.getParameterAnnotations();
+        Map<String, Object> param = new HashMap<String, Object>();
+        for (int i = 0; i < anns.length; i++) {
+            for (int j = 0; j < anns[i].length; j++) {
+                if (anns[i][j] instanceof Key) {
+                    Key key = (Key) anns[i][j];
+                    param.put(key.value(), args[i]);
+                }
+            }
+        }
+        if (Maps.isEmpty(param)) {
+            return null;
+        }
+        if (param.size() == 1) {
+            List<Object> list = new ArrayList<Object>(param.values());
+            return list.get(0);
+        }
+        return param;
     }
 
     /**
