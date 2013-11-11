@@ -1,5 +1,5 @@
 package com.fenwell.jwell.mybatis.operation;
 
-public class SelectOneOperation {
+public class SelectOneOperation extends AbstractOperation{
 
 }

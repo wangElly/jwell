@@ -1,5 +1,5 @@
 package com.fenwell.jwell.mybatis.operation;
 
-public class UpdateOperation {
+public class UpdateOperation extends AbstractOperation{
 
 }

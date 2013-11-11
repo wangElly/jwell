@@ -1,5 +1,5 @@
 package com.fenwell.jwell.mybatis.operation;
 
-public class DeleteOperation {
+public class DeleteOperation extends AbstractOperation{
 
 }
