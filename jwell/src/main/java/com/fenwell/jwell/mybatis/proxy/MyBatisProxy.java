@@ -12,7 +12,6 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.session.SqlSession;
 
 import com.fenwell.jwell.mybatis.annotation.Delete;
 import com.fenwell.jwell.mybatis.annotation.Insert;
@@ -22,7 +21,8 @@ import com.fenwell.jwell.mybatis.annotation.SQL;
 import com.fenwell.jwell.mybatis.annotation.SelectList;
 import com.fenwell.jwell.mybatis.annotation.SelectOne;
 import com.fenwell.jwell.mybatis.annotation.Update;
-import com.fenwell.jwell.mybatis.transaction.Tran;
+import com.fenwell.jwell.mybatis.operation.AbstractOperation;
+import com.fenwell.jwell.mybatis.operation.InsertOperation;
 import com.fenwell.util.Arrays;
 import com.fenwell.util.Maps;
 import com.fenwell.util.Strings;
@@ -31,6 +31,12 @@ public class MyBatisProxy implements MethodInterceptor {
 
     private static final Log log = LogFactory.getLog(MyBatisProxy.class);
 
+    private AbstractOperation insert = new InsertOperation();
+    private AbstractOperation delete = new InsertOperation();
+    private AbstractOperation update = new InsertOperation();
+    private AbstractOperation selectOne = new InsertOperation();
+    private AbstractOperation selectList = new InsertOperation();
+
     public Object intercept(Object target, Method mtd, Object[] args, MethodProxy proxy)
             throws Throwable {
         Annotation an = hasDaoMethod(mtd);
@@ -38,26 +44,32 @@ public class MyBatisProxy implements MethodInterceptor {
             log.warn(mtd + " is not dao method !");
             return null;
         }
-        Object result = null;
         Object param = makeParam(mtd, args);
         String id = getId(an, target, mtd);
+        AbstractOperation operation = operationFactory(an);
+        return operation.execute(id, mtd, param);
+    }
+
+    private AbstractOperation operationFactory(Annotation an) {
+        AbstractOperation operation = null;
         if (an instanceof Insert) {
-            result = doInsert(id, mtd, param);
+            operation = insert;
         } else if (an instanceof Delete) {
-            result = doDelete(id, mtd, param);
+            operation = delete;
         } else if (an instanceof Update) {
-            result = doUpdate(id, mtd, param);
+            operation = update;
         } else if (an instanceof SelectOne) {
-            System.out.println("查询一个");
+            operation = selectOne;
         } else if (an instanceof SelectList) {
-            System.out.println("查询列表！");
+            operation = selectList;
         }
-        return result;
+        return operation;
     }
 
     private String getId(Annotation an, Object target, Method mtd) {
-        String id = makeId(an, target, mtd);
-        return id;
+        // TODO
+        // 以后需要缓存ID 。免得每次都用反射获取。
+        return makeId(an, target, mtd);
     }
 
     private String makeId(Annotation an, Object target, Method mtd) {
@@ -90,6 +102,7 @@ public class MyBatisProxy implements MethodInterceptor {
     }
 
     private Object makeParam(Method mtd, Object[] args) {
+        // TODO 以后也需要缓存。。 加批注
         if (Arrays.isEmpty(args)) {
             return null;
         }
@@ -111,35 +124,6 @@ public class MyBatisProxy implements MethodInterceptor {
             return list.get(0);
         }
         return param;
-    }
-
-    /**
-     * 执行insert 方法
-     * 
-     * @param id
-     * @param mtd
-     * @param param
-     * @return
-     */
-    private Object doInsert(String id, Method mtd, Object param) {
-        SqlSession session = Tran.getSession();
-        boolean result = session.insert(id, param) > 0;
-        Tran.closeSession(session);
-        return result;
-    }
-
-    private Object doUpdate(String id, Method mtd, Object param) {
-        SqlSession session = Tran.getSession();
-        boolean result = session.update(id, param) > 0;
-        Tran.closeSession(session);
-        return result;
-    }
-
-    private Object doDelete(String id, Method mtd, Object param) {
-        SqlSession session = Tran.getSession();
-        boolean result = session.delete(id, param) > 0;
-        Tran.closeSession(session);
-        return result;
     }
 
     private Annotation hasDaoMethod(Method mtd) {
