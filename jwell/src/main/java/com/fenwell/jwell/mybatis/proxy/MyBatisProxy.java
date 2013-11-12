@@ -127,6 +127,7 @@ public class MyBatisProxy implements MethodInterceptor {
     }
 
     private Annotation hasDaoMethod(Method mtd) {
+        // TODO 需要缓存管理。
         Annotation[] anns = mtd.getAnnotations();
         for (Annotation an : anns) {
             SQL sql = an.annotationType().getAnnotation(SQL.class);
