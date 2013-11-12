@@ -67,8 +67,7 @@ public class MyBatisProxy implements MethodInterceptor {
     }
 
     private String getId(Annotation an, Object target, Method mtd) {
-        // TODO
-        // 以后需要缓存ID 。免得每次都用反射获取。
+        // TODO 以后需要缓存ID 。免得每次都用反射获取。
         return makeId(an, target, mtd);
     }
 
