@@ -22,7 +22,11 @@ import com.fenwell.jwell.mybatis.annotation.SelectList;
 import com.fenwell.jwell.mybatis.annotation.SelectOne;
 import com.fenwell.jwell.mybatis.annotation.Update;
 import com.fenwell.jwell.mybatis.operation.AbstractOperation;
+import com.fenwell.jwell.mybatis.operation.DeleteOperation;
 import com.fenwell.jwell.mybatis.operation.InsertOperation;
+import com.fenwell.jwell.mybatis.operation.SelectListOperation;
+import com.fenwell.jwell.mybatis.operation.SelectOneOperation;
+import com.fenwell.jwell.mybatis.operation.UpdateOperation;
 import com.fenwell.util.Arrays;
 import com.fenwell.util.Maps;
 import com.fenwell.util.Strings;
@@ -32,10 +36,10 @@ public class MyBatisProxy implements MethodInterceptor {
     private static final Log log = LogFactory.getLog(MyBatisProxy.class);
 
     private AbstractOperation insert = new InsertOperation();
-    private AbstractOperation delete = new InsertOperation();
-    private AbstractOperation update = new InsertOperation();
-    private AbstractOperation selectOne = new InsertOperation();
-    private AbstractOperation selectList = new InsertOperation();
+    private AbstractOperation delete = new DeleteOperation();
+    private AbstractOperation update = new UpdateOperation();
+    private AbstractOperation selectOne = new SelectOneOperation();
+    private AbstractOperation selectList = new SelectListOperation();
 
     public Object intercept(Object target, Method mtd, Object[] args, MethodProxy proxy)
             throws Throwable {

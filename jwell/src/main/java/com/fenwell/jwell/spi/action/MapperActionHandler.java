@@ -71,6 +71,11 @@ public class MapperActionHandler implements ActionHandler {
     private String urlSuffix = ".do";
 
     /**
+     * 是否区分大小写 true：区分大小写。 false：不区分大小写
+     */
+    private boolean charCase = false;
+
+    /**
      * 参数处理器
      */
     private ParamHandler paramHandler;
@@ -245,11 +250,14 @@ public class MapperActionHandler implements ActionHandler {
      */
     private String getActinURI(HttpServletRequest request) {
         String basePath = request.getContextPath();
-        String uri = request.getRequestURI().replace(basePath, Strings.EMPTY).toLowerCase();
+        String uri = request.getRequestURI().replace(basePath, Strings.EMPTY);
         if (!uri.endsWith(urlSuffix)) {
             return null;
         }
         uri = uri.replace(urlSuffix, Strings.EMPTY).substring(1);
+        if (!charCase) {
+            uri = uri.toLowerCase();
+        }
         return uri;
     }
 
@@ -284,6 +292,9 @@ public class MapperActionHandler implements ActionHandler {
             }
             String childURI = Strings.defVal(child.path(), mtd.getName());
             String uri = makeURI(parentURI, childURI);
+            if (!charCase) {
+                uri = uri.toLowerCase();
+            }
             ActionContent ac = makeActionContent(parent, child, mtd, obj);
             actions.put(uri, ac);
             String msg = String.format("Scan action -> %s%s method type is %s invoke method in %s",
@@ -388,6 +399,10 @@ public class MapperActionHandler implements ActionHandler {
 
     public void setUrlSuffix(String urlSuffix) {
         this.urlSuffix = urlSuffix;
+    }
+
+    public void setCharCase(boolean charCase) {
+        this.charCase = charCase;
     }
 
 }

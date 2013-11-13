@@ -17,7 +17,7 @@ public class InsertOperation extends AbstractOperation {
             return null;
         }
         if (returnTypeIsPrimitive(mtd)) {
-            Class<?> cls = mtd.getClass();
+            Class<?> cls = mtd.getReturnType();
             return returnPrimitiveType(cls, result);
         }
         return null;
