@@ -11,7 +11,7 @@ import com.fenwell.jwell.api.ViewHandler;
 
 public class HttlViewHandler implements ViewHandler {
 
-    private String encode = "UTF-8";
+    protected String encode = "UTF-8";
 
     public void execute(HttpServletRequest request, HttpServletResponse response, Object obj)
             throws Exception {
@@ -29,6 +29,7 @@ public class HttlViewHandler implements ViewHandler {
 
         ServletOutputStream out = response.getOutputStream();
         template.render(out);
+        
         out.flush();
         out.close();
 
