@@ -1,6 +1,5 @@
 package com.fenwell.jwell.support.view;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class View {
