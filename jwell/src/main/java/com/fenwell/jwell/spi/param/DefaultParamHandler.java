@@ -1,5 +1,6 @@
 package com.fenwell.jwell.spi.param;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 import javax.servlet.ServletRequest;
@@ -10,11 +11,15 @@ import javax.servlet.http.HttpSession;
 
 import com.fenwell.jwell.annotation.Param;
 import com.fenwell.jwell.api.ParamHandler;
+import com.fenwell.jwell.api.UploadHandler;
+import com.fenwell.jwell.spi.pojo.FileMeta;
 import com.fenwell.util.Convert;
 import com.fenwell.util.Reflects;
 import com.fenwell.util.Strings;
 
 public class DefaultParamHandler implements ParamHandler {
+
+    private UploadHandler uploadHandler;
 
     public Object execute(HttpServletRequest request, HttpServletResponse response, Class<?> t,
             Param param) {
@@ -34,11 +39,15 @@ public class DefaultParamHandler implements ParamHandler {
         }
         return rst;
     }
-    
+
     private Object singleValue(Class<?> t, String name, String val, String defVal,
             HttpServletRequest request) {
         if (eq(t, String.class)) {
             return Strings.defVal(val, defVal);
+        }
+        // 上传文件~！
+        if (eq(t, File.class, FileMeta.class)) {
+            return uploadHandler.upload(request, name);
         }
         Object rst = null;
         if ((rst = isPrimitive(t, val, defVal)) != null) {

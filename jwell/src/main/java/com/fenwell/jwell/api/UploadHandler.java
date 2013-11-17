@@ -1,12 +1,11 @@
 package com.fenwell.jwell.api;
 
-import java.io.File;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import com.fenwell.jwell.spi.pojo.FileMeta;
 
 public interface UploadHandler {
 
-    public File upload(HttpServletRequest request, HttpServletResponse resp);
+    public FileMeta upload(HttpServletRequest request, String name);
 
 }
