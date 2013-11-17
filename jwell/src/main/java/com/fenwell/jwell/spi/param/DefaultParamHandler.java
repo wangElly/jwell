@@ -154,4 +154,8 @@ public class DefaultParamHandler implements ParamHandler {
         return false;
     }
 
+    public void setUploadHandler(UploadHandler uploadHandler) {
+        this.uploadHandler = uploadHandler;
+    }
+
 }
