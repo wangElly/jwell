@@ -75,5 +75,9 @@ public class Mvcs {
         }
         return instance.applicationContext.getBean(cls);
     }
+    
+    public static String realPath(){
+        return instance.filterConfig.getServletContext().getRealPath("/");
+    }
 
 }

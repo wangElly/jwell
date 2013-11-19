@@ -2,6 +2,7 @@ package com.fenwell.jwell.spi.param;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -47,13 +48,21 @@ public class DefaultParamHandler implements ParamHandler {
         }
         // 上传文件~！
         if (eq(t, File.class, FileMeta.class)) {
-            return uploadHandler.upload(request, name);
+            return isFileType(request, name);
         }
         Object rst = null;
         if ((rst = isPrimitive(t, val, defVal)) != null) {
             return rst;
         }
         return rst;
+    }
+
+    private FileMeta isFileType(HttpServletRequest request, String name) {
+        List<FileMeta> files = uploadHandler.upload(request, name);
+        if (files != null) {
+            return files.get(0);
+        }
+        return null;
     }
 
     private Object isObject(HttpServletRequest request, Class<?> t, String name) {
