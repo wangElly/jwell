@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -122,7 +124,7 @@ public class FileUploadHandler implements UploadHandler {
         }
         String[] delList = getDeleteFileNames(lists);
         if (delList != null) {
-            for (int i = 0; i < clearPoolSize; i++) {
+            for (int i = 0; i < delList.length; i++) {
                 String path = savePath + File.separator + delList[i];
                 File f = new File(path);
                 f.delete();
@@ -132,11 +134,17 @@ public class FileUploadHandler implements UploadHandler {
 
     private String[] getDeleteFileNames(String[] lists) {
         long[] intList = new long[lists.length];
+        Map<Long, String> fileMap = new HashMap<Long, String>();
         for (int i = 0; i < intList.length; i++) {
             intList[i] = fileName2Int(lists[i]);
+            fileMap.put(intList[i], lists[i]);
         }
         java.util.Arrays.sort(intList);
-        return null;
+        String[] dl = new String[clearPoolSize];
+        for (int i = 0; i < clearPoolSize; i++) {
+            dl[i] = fileMap.get(intList[i]);
+        }
+        return dl;
     }
 
     private long fileName2Int(String file) {
