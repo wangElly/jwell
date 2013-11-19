@@ -46,7 +46,7 @@ public class FileUploadHandler implements UploadHandler {
     private int maxSize = 1000;
 
     private String[] defultFiles = { "rar", "doc", "docx", "zip", "pdf", "txt", "swf", "wmv",
-            "gif", "png", "jpg", "jpeg", "bmp" };
+            "gif", "png", "jpg", "jpeg", "bmp", "xls" };
 
     /**
      * 文件允许格式
@@ -61,12 +61,12 @@ public class FileUploadHandler implements UploadHandler {
     /**
      * 文件池中最大文件数量
      */
-    private int maxPoolSize = 10;
+    private int maxPoolSize = 100;
 
     /**
      * 每次清理文件池的数量
      */
-    private int clearPoolSize = 8;
+    private int clearPoolSize = 80;
 
     public FileUploadHandler() {
         super();
