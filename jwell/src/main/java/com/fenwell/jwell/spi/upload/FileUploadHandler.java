@@ -59,12 +59,12 @@ public class FileUploadHandler implements UploadHandler {
     /**
      * 文件池中最大文件数量
      */
-    private int maxPoolSize = 1000;
+    private int maxPoolSize = 10;
 
     /**
      * 每次清理文件池的数量
      */
-    private int clearPoolSize = 800;
+    private int clearPoolSize = 8;
 
     public FileUploadHandler() {
         super();
@@ -106,16 +106,50 @@ public class FileUploadHandler implements UploadHandler {
         return files;
     }
 
+    /**
+     * 清理文件池中的临时文件
+     * 
+     * @param savePath
+     */
     private void clearFilePool(String savePath) {
         File file = new File(savePath);
         String[] lists = file.list();
         if (Arrays.isEmpty(lists)) {
             return;
         }
-        if (lists.length > maxPoolSize) {
+        if (lists.length < maxPoolSize) {
+            return;
+        }
+        String[] delList = getDeleteFileNames(lists);
+        if (delList != null) {
+            for (int i = 0; i < clearPoolSize; i++) {
+                String path = savePath + File.separator + delList[i];
+                File f = new File(path);
+                f.delete();
+            }
         }
     }
-    
+
+    private String[] getDeleteFileNames(String[] lists) {
+        long[] intList = new long[lists.length];
+        for (int i = 0; i < intList.length; i++) {
+            intList[i] = fileName2Int(lists[i]);
+        }
+        java.util.Arrays.sort(intList);
+        return null;
+    }
+
+    private long fileName2Int(String file) {
+        int lastDot = file.lastIndexOf(".");
+        String name = null;
+        if (lastDot == -1) {
+            name = file;
+        } else {
+            name = file.substring(0, lastDot);
+        }
+        return Long.parseLong(name);
+    }
+
     private List<File> errorResult(int errorCodeSize) {
         List<File> files = new ArrayList<File>();
         FileMeta fileMeta = new FileMeta(Strings.EMPTY);
