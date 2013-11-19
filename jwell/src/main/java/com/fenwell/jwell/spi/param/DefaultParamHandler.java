@@ -14,6 +14,7 @@ import com.fenwell.jwell.annotation.Param;
 import com.fenwell.jwell.api.ParamHandler;
 import com.fenwell.jwell.api.UploadHandler;
 import com.fenwell.jwell.spi.pojo.FileMeta;
+import com.fenwell.util.Collections;
 import com.fenwell.util.Convert;
 import com.fenwell.util.Reflects;
 import com.fenwell.util.Strings;
@@ -57,9 +58,9 @@ public class DefaultParamHandler implements ParamHandler {
         return rst;
     }
 
-    private FileMeta isFileType(HttpServletRequest request, String name) {
-        List<FileMeta> files = uploadHandler.upload(request, name);
-        if (files != null) {
+    private File isFileType(HttpServletRequest request, String name) {
+        List<File> files = uploadHandler.upload(request, name);
+        if (!Collections.isEmpty(files)) {
             return files.get(0);
         }
         return null;

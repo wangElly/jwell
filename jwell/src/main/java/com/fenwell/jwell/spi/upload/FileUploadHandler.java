@@ -1,9 +1,10 @@
 package com.fenwell.jwell.spi.upload;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,16 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.fenwell.jwell.Mvcs;
 import com.fenwell.jwell.api.UploadHandler;
 import com.fenwell.jwell.spi.pojo.FileMeta;
+import com.fenwell.util.Arrays;
 import com.fenwell.util.Strings;
 
 public class FileUploadHandler implements UploadHandler {
@@ -72,7 +76,7 @@ public class FileUploadHandler implements UploadHandler {
         }
     }
 
-    public List<FileMeta> upload(HttpServletRequest request, String name) {
+    public List<File> upload(HttpServletRequest request, String name) {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (!isMultipart) {
             log.error("Does not contain a file upload domain !");
@@ -84,15 +88,39 @@ public class FileUploadHandler implements UploadHandler {
         if (!saveFile.exists()) {
             saveFile.mkdirs();
         }
-        factory.setRepository(saveFile);
-        List<FileMeta> files = null;
+        List<File> files = null;
         try {
             files = execute(factory, request, name, savePath);
+        } catch (SizeLimitExceededException e) {
+            files = errorResult(UploadHandler.ERROR_CODE_SIZE);
+        } catch (InvalidContentTypeException e) {
+            files = errorResult(UploadHandler.ERROR_CODE_ENTYPE);
         } catch (FileUploadException e) {
-            e.printStackTrace();
+            files = errorResult(UploadHandler.ERROR_CODE_REQUEST);
         } catch (IOException e) {
-            e.printStackTrace();
+            files = errorResult(UploadHandler.ERROR_CODE_IO);
+        } catch (Exception e) {
+            files = errorResult(UploadHandler.ERROR_CODE_UNKNOWN);
         }
+        clearFilePool(savePath);
+        return files;
+    }
+
+    private void clearFilePool(String savePath) {
+        File file = new File(savePath);
+        String[] lists = file.list();
+        if (Arrays.isEmpty(lists)) {
+            return;
+        }
+        if (lists.length > maxPoolSize) {
+        }
+    }
+    
+    private List<File> errorResult(int errorCodeSize) {
+        List<File> files = new ArrayList<File>();
+        FileMeta fileMeta = new FileMeta(Strings.EMPTY);
+        fileMeta.setErrcode(errorCodeSize);
+        files.add(fileMeta);
         return files;
     }
 
@@ -108,12 +136,13 @@ public class FileUploadHandler implements UploadHandler {
         return path.toString();
     }
 
-    private List<FileMeta> execute(DiskFileItemFactory factory, HttpServletRequest request,
+    private List<File> execute(DiskFileItemFactory factory, HttpServletRequest request,
             String name, String savePath) throws FileUploadException, IOException {
         ServletFileUpload sfu = new ServletFileUpload(factory);
         sfu.setSizeMax(this.maxSize * 1024);
         sfu.setHeaderEncoding(this.encode);
         FileItemIterator fii = sfu.getItemIterator(request);
+        List<File> files = new ArrayList<File>();
         while (fii.hasNext()) {
             FileItemStream fis = fii.next();
             if (!fis.isFormField()) {
@@ -122,17 +151,33 @@ public class FileUploadHandler implements UploadHandler {
                     continue;
                 }
                 String fileType = getType(fis.getName());
-                if (!allowFiles.contains(fileType)) {
-                    
-                }
                 String originalName = fis.getName();
                 String fileName = System.currentTimeMillis() + "." + fileType;
+                if (!allowFiles.contains(fileType)) {
+                    FileMeta fm = new FileMeta(Strings.EMPTY);
+                    fm.setFileType(fileType);
+                    fm.setOriginalName(originalName);
+                    files.add(fm);
+                    continue;
+                }
                 String uri = savePath + File.separator + fileName;
                 BufferedInputStream in = new BufferedInputStream(fis.openStream());
                 int size = in.available();
+                FileOutputStream out = new FileOutputStream(new File(uri));
+                BufferedOutputStream output = new BufferedOutputStream(out);
+                Streams.copy(in, output, true);
+
+                FileMeta fm = new FileMeta(uri);
+                fm.setFileType(fileType);
+                fm.setOriginalName(originalName);
+                fm.setSize(size);
+                fm.setErrcode(UploadHandler.ERROR_CODE_SUCCESS);
+                fm.setUri(uri);
+
+                files.add(fm);
             }
         }
-        return null;
+        return files;
     }
 
     private String getType(String name) {
