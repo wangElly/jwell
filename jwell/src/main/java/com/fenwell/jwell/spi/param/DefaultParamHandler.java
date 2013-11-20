@@ -2,7 +2,9 @@ package com.fenwell.jwell.spi.param;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -51,11 +53,21 @@ public class DefaultParamHandler implements ParamHandler {
         if (eq(t, File.class, FileMeta.class)) {
             return isFileType(request, name);
         }
+        // 集合类型
+        if (eq(t, List.class, Set.class) || t.isArray()) {
+            return isArray(t, request, name);
+        }
         Object rst = null;
         if ((rst = isPrimitive(t, val, defVal)) != null) {
             return rst;
         }
         return rst;
+    }
+
+    private Object isArray(Class<?> t, HttpServletRequest request, String name) {
+        Type type = t.getGenericSuperclass();
+        System.out.println(type);
+        return null;
     }
 
     private File isFileType(HttpServletRequest request, String name) {
