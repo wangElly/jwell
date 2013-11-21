@@ -68,7 +68,7 @@ public class DefaultParamHandler implements ParamHandler {
         return rst;
     }
 
-    private Object isArray(Class<?> t, HttpServletRequest request, String name) {
+    private <T> Object isArray(Class<?> t, HttpServletRequest request, String name) {
         if (!arrayIsPrimitive(t)) {
             String msg = "Currently not supports [%s] type , the current support type has : String , int , short , long , double , float , boolean , byte , char , File , FileMeta";
             log.warn(String.format(msg, t));

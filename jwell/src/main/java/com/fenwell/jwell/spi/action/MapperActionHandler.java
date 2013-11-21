@@ -128,7 +128,8 @@ public class MapperActionHandler implements ActionHandler {
      */
     private void invoke(HttpServletRequest request, HttpServletResponse response,
             ActionContent actionContent) throws Exception {
-        Object interResult = doInterceptor(request, response, actionContent.getInterceptors());
+        Object interResult = doInterceptor(request, response, actionContent.getInterceptors(),
+                actionContent.getOriginalMethod());
         // 如果被拦截器拦截，则执行视图
         if (interResult != null) {
             viewHandler.execute(request, response, interResult);
@@ -206,14 +207,14 @@ public class MapperActionHandler implements ActionHandler {
      * @return
      */
     private Object doInterceptor(HttpServletRequest request, HttpServletResponse response,
-            Class<? extends Interceptors>[] interceptors) {
+            Class<? extends Interceptors>[] interceptors, Method method) {
         if (Arrays.isEmpty(interceptors)) {
             return null;
         }
         Object result = null;
         for (Class<? extends Interceptors> cls : interceptors) {
             Interceptors interceptor = Mvcs.getBean(cls);
-            result = interceptor.server(request, response);
+            result = interceptor.server(request, response, method);
             if (result != null) {
                 return result;
             }
@@ -318,6 +319,7 @@ public class MapperActionHandler implements ActionHandler {
         ac.setInstance(obj);
         ac.setMethod(method);
         ac.setMethodIndex(methodIndex);
+        ac.setOriginalMethod(mtd);
         ac.setInterceptors(interceptors);
         return ac;
     }
