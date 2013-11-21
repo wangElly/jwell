@@ -27,8 +27,9 @@ import com.fenwell.jwell.mybatis.operation.InsertOperation;
 import com.fenwell.jwell.mybatis.operation.SelectListOperation;
 import com.fenwell.jwell.mybatis.operation.SelectOneOperation;
 import com.fenwell.jwell.mybatis.operation.UpdateOperation;
+import com.fenwell.jwell.mybatis.proxy.vo.ParamVO;
 import com.fenwell.util.Arrays;
-import com.fenwell.util.Maps;
+import com.fenwell.util.Collections;
 import com.fenwell.util.Strings;
 
 public class MyBatisProxy implements MethodInterceptor {
@@ -40,6 +41,10 @@ public class MyBatisProxy implements MethodInterceptor {
     private AbstractOperation update = new UpdateOperation();
     private AbstractOperation selectOne = new SelectOneOperation();
     private AbstractOperation selectList = new SelectListOperation();
+
+    private Map<Method, String> ID_CACHE = new HashMap<Method, String>();
+    private Map<Method, Annotation> ANNOTATION_CACHE = new HashMap<Method, Annotation>();
+    private Map<Method, ParamVO> PARAM_CACHE = new HashMap<Method, ParamVO>();
 
     public Object intercept(Object target, Method mtd, Object[] args, MethodProxy proxy)
             throws Throwable {
@@ -71,8 +76,12 @@ public class MyBatisProxy implements MethodInterceptor {
     }
 
     private String getId(Annotation an, Object target, Method mtd) {
-        // TODO 以后需要缓存ID 。免得每次都用反射获取。
-        return makeId(an, target, mtd);
+        String id = ID_CACHE.get(mtd);
+        if (id == null) {
+            id = makeId(an, target, mtd);
+            ID_CACHE.put(mtd, id);
+        }
+        return id;
     }
 
     private String makeId(Annotation an, Object target, Method mtd) {
@@ -105,39 +114,70 @@ public class MyBatisProxy implements MethodInterceptor {
     }
 
     private Object makeParam(Method mtd, Object[] args) {
-        // TODO 以后也需要缓存。。 加批注
         if (Arrays.isEmpty(args)) {
             return null;
         }
+        ParamVO pvo = PARAM_CACHE.get(mtd);
+        Object result = null;
+        if (pvo == null) {
+            pvo = createParamVO(mtd, args);
+            PARAM_CACHE.put(mtd, pvo);
+        }
+        if (pvo.isEmpty()) {
+            result = null;
+        } else if (pvo.isSingle()) {
+            result = args[0];
+        } else {
+            Map<String, Object> param = new HashMap<String, Object>();
+            int[] index = pvo.getIndex();
+            String[] value = pvo.getValue();
+            for (int i = 0; i < index.length; i++) {
+                param.put(value[i], args[index[i]]);
+            }
+            result = param;
+        }
+        return result;
+    }
+
+    private ParamVO createParamVO(Method mtd, Object[] args) {
+        ParamVO pvo = new ParamVO();
         Annotation[][] anns = mtd.getParameterAnnotations();
-        Map<String, Object> param = new HashMap<String, Object>();
+        List<Integer> index = new ArrayList<Integer>();
+        List<String> value = new ArrayList<String>();
         for (int i = 0; i < anns.length; i++) {
             for (int j = 0; j < anns[i].length; j++) {
                 if (anns[i][j] instanceof Key) {
                     Key key = (Key) anns[i][j];
-                    param.put(key.value(), args[i]);
+                    value.add(key.value());
+                    index.add(i);
                 }
             }
         }
-        if (Maps.isEmpty(param)) {
-            return null;
+        if (Collections.isEmpty(index)) {
+            pvo.setEmpty(true);
+        } else {
+            if (index.size() == 1) {
+                pvo.setSingle(true);
+            } else {
+                pvo.setIndex(index);
+                pvo.setValue(value);
+            }
         }
-        if (param.size() == 1) {
-            List<Object> list = new ArrayList<Object>(param.values());
-            return list.get(0);
-        }
-        return param;
+        return pvo;
     }
 
     private Annotation hasDaoMethod(Method mtd) {
-        // TODO 需要缓存管理。
-        Annotation[] anns = mtd.getAnnotations();
-        for (Annotation an : anns) {
-            SQL sql = an.annotationType().getAnnotation(SQL.class);
-            if (sql != null)
-                return an;
+        Annotation temp = ANNOTATION_CACHE.get(mtd);
+        if (temp == null) {
+            Annotation[] anns = mtd.getAnnotations();
+            for (Annotation an : anns) {
+                SQL sql = an.annotationType().getAnnotation(SQL.class);
+                if (sql != null)
+                    temp = an;
+            }
+            ANNOTATION_CACHE.put(mtd, temp);
         }
-        return null;
+        return temp;
     }
 
 }
