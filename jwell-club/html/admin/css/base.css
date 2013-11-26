@@ -1,0 +1,55 @@
+body{
+	overflow-y:scroll;
+}
+
+.navbar-jclub{
+	background-color: #343942;
+	border-color: #343942;
+}
+
+.navbar-jclub .navbar-brand {
+	font-size: 15px;
+	font-weight: 300;
+	font-style: normal;
+	color: #fafafa;
+	width:220px;
+	background: #20242a
+}
+
+.navbar-jclub .navbar-tool{
+	float:left;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+
+.navbar-jclub .navbar-tool ul{
+	float:left;
+	padding:10px 0;
+	height:30px;
+	line-height: 30px;
+	list-style: none;	
+}
+
+.navbar-jclub .navbar-tool ul li{
+	float: left;
+	margin-left: 10px;
+	padding:0 10px;
+	color:#fff;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	background: #2e333d;
+	cursor: pointer;
+}
+
+.navbar-jclub .navbar-tool ul li:hover{
+	background: #20242a;
+}
+
+.sidebar{
+	width:220px;
+	height:100%;
+	margin-top:51px;
+	background: #F5F7F9
+}
