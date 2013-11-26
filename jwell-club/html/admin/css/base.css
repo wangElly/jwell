@@ -2,9 +2,17 @@ body{
 	overflow-y:scroll;
 }
 
+.right{
+	float:right;
+}
+
+.left{
+	float:left;
+}
+
 .navbar-jclub{
+	border:0;
 	background-color: #343942;
-	border-color: #343942;
 }
 
 .navbar-jclub .navbar-brand {
@@ -36,20 +44,66 @@ body{
 	margin-left: 10px;
 	padding:0 10px;
 	color:#fff;
+	background: #2e333d;
+	cursor: pointer;
 	border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
-	background: #2e333d;
-	cursor: pointer;
+	-webkit-transition:all .3s ease;
+	-moz-transition:all .3s ease;
+	-o-transition:all .3s ease;
+	-ms-transition:all .3s ease;
+	transition:all .3s ease;
 }
 
 .navbar-jclub .navbar-tool ul li:hover{
 	background: #20242a;
 }
 
+.navbar-jclub .navbar-tool .fase-menu {
+	background: #2381e9;
+}
+
+.navbar-jclub .navbar-tool .fase-menu:hover{
+	background: #4F9AED;
+}
+
+.navbar-jclub .navbar-face-li{
+	margin:0 15px;
+}
+
+.navbar-jclub .navbar-face{
+	padding:8px 15px 8px 15px;
+	border:1px solid #333;
+	border-top:0;
+	border-bottom:0;
+	color:#9c9c9c;
+}
+
+.navbar-jclub .navbar-face:hover{
+	color:#f2f2f2;
+	background: #2d2d2d;
+}
+
+.navbar-jclub .navbar-face img{
+	margin-right: 5px;
+	width:34px;
+	height:34px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+
+.navbar-jclub .open .navbar-face:focus{
+	background: #2d2d2d;
+	border:1px solid #333;
+	border-top:0;
+	border-bottom:0;
+}
+
 .sidebar{
 	width:220px;
 	height:100%;
-	margin-top:51px;
+	margin-top:50px;
 	background: #F5F7F9
 }
