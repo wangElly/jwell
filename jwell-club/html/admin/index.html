@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/nanoscroller.css">
     <link rel="stylesheet" href="css/base.css">
     <script src="js/jquery.min.js"></script>
+    <script src="js/nanoscroller.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/base.js"></script>
   </head>
@@ -24,13 +26,6 @@
         </ul>
       </div>
       <div class="fr">
-        <div class="navbar-tool">
-          <ul>
-            <li class="fase-menu" data-toggle="tooltip" data-original-title="快捷菜单" data-placement="left">
-              <span class="glyphicon glyphicon-th-large"></span>
-            </li>
-          </ul>
-        </div>
         <ul class="nav navbar-nav navbar-right navbar-face">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle navbar-face-a" data-toggle="dropdown">
@@ -49,7 +44,44 @@
         </ul>
       </div>
     </header>
-    <div class="sidebar affix">
+    <div class="sidebar affix" id="sidebar">
+      <div class="nano">
+        <div class="content">
+          <ul class="first">
+            <li class="active">
+                <a href="#">
+                  <b class="glyphicon glyphicon-dashboard"></b>
+                  <span>控制台</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                  <b class="glyphicon glyphicon-user"></b>
+                  <span>用户管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                  <b class="glyphicon glyphicon-list"></b>
+                  <span>帖子管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                  <b class="glyphicon glyphicon-usd"></b>
+                  <span>积分设置</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                  <b class="glyphicon glyphicon-list-alt"></b>
+                  <span>公告管理</span>
+                </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      </div>
     </div>
   </body>
 </html>
