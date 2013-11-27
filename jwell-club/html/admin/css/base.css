@@ -1,16 +1,16 @@
-body{
+body {
 	overflow-y:scroll;
 }
 
-.right{
+.fr {
 	float:right;
 }
 
-.left{
+.fl {
 	float:left;
 }
 
-.navbar-jclub{
+.navbar-jclub {
 	border:0;
 	background-color: #343942;
 }
@@ -24,14 +24,14 @@ body{
 	background: #20242a
 }
 
-.navbar-jclub .navbar-tool{
+.navbar-jclub .navbar-tool {
 	float:left;
 	box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 }
 
-.navbar-jclub .navbar-tool ul{
+.navbar-jclub .navbar-tool ul {
 	float:left;
 	padding:10px 0;
 	height:30px;
@@ -39,7 +39,7 @@ body{
 	list-style: none;	
 }
 
-.navbar-jclub .navbar-tool ul li{
+.navbar-jclub .navbar-tool ul li {
 	float: left;
 	margin-left: 10px;
 	padding:0 10px;
@@ -56,7 +56,7 @@ body{
 	transition:all .3s ease;
 }
 
-.navbar-jclub .navbar-tool ul li:hover{
+.navbar-jclub .navbar-tool ul li:hover {
 	background: #20242a;
 }
 
@@ -64,44 +64,39 @@ body{
 	background: #2381e9;
 }
 
-.navbar-jclub .navbar-tool .fase-menu:hover{
+.navbar-jclub .navbar-tool .fase-menu:hover {
 	background: #4F9AED;
 }
 
-.navbar-jclub .navbar-face-li{
+.navbar-jclub .navbar-face {
 	margin:0 15px;
+	cursor: pointer;
 }
 
-.navbar-jclub .navbar-face{
-	padding:8px 15px 8px 15px;
+.navbar-face .navbar-img {
+	padding:8px 15px;
 	border:1px solid #333;
-	border-top:0;
-	border-bottom:0;
 	color:#9c9c9c;
 }
 
-.navbar-jclub .navbar-face:hover{
-	color:#f2f2f2;
+.navbar-face .navbar-img:hover {
 	background: #2d2d2d;
+	color:#d3d3d3;
 }
 
-.navbar-jclub .navbar-face img{
-	margin-right: 5px;
-	width:34px;
+.navbar-face .navbar-img span{
+	margin:0 10px;
+}
+
+.navbar-face .navbar-img img {
 	height:34px;
+	width:34px;
 	border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 }
 
-.navbar-jclub .open .navbar-face:focus{
-	background: #2d2d2d;
-	border:1px solid #333;
-	border-top:0;
-	border-bottom:0;
-}
-
-.sidebar{
+.sidebar {
 	width:220px;
 	height:100%;
 	margin-top:50px;
