@@ -80,6 +80,9 @@ body {
 .navbar-jclub .navbar-face .navbar-face-a img{
 	width:34px;
 	height:34px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
 }
 
 .navbar-jclub .navbar-face .navbar-face-a {
@@ -89,6 +92,10 @@ body {
 	border-bottom: 0;
 	background-color: transparent;
 	color:#9c9c9c;
+}
+
+.navbar-jclub .navbar-face .navbar-face-a span{
+	margin:0 2px 0 10px;
 }
 
 .navbar-jclub .navbar-face .navbar-face-a b {
