@@ -70,30 +70,45 @@ body {
 
 .navbar-jclub .navbar-face {
 	margin:0 15px;
-	cursor: pointer;
+	display: inline-block;
 }
 
-.navbar-face .navbar-img {
+.navbar-jclub .navbar-face .navbar-face-a {
 	padding:8px 15px;
+}
+
+.navbar-jclub .navbar-face .navbar-face-a img{
+	width:34px;
+	height:34px;
+}
+
+.navbar-jclub .navbar-face .navbar-face-a {
+	color:#9c9c9c;
 	border:1px solid #333;
+	border-top: 0;
+	border-bottom: 0;
+	background-color: transparent;
 	color:#9c9c9c;
 }
 
-.navbar-face .navbar-img:hover {
-	background: #2d2d2d;
-	color:#d3d3d3;
+.navbar-jclub .navbar-face .navbar-face-a b {
+	border-top-color:#9c9c9c;
+	border-bottom-color:#9c9c9c;
 }
 
-.navbar-face .navbar-img span{
-	margin:0 10px;
+.navbar-jclub .navbar-face .navbar-face-a:hover,
+.navbar-jclub .navbar-face .navbar-face-a:focus {
+	border:1px solid #333;
+	border-top: 0;
+	border-bottom: 0;
+	background-color: #2d2d2d;
+	color: #d3d3d3;
 }
 
-.navbar-face .navbar-img img {
-	height:34px;
-	width:34px;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
+.navbar-jclub .navbar-face .navbar-face-a:hover b,
+.navbar-jclub .navbar-face .navbar-face-a:focus b {
+	border-top-color:#d3d3d3;
+	border-bottom-color:#d3d3d3;
 }
 
 .sidebar {
