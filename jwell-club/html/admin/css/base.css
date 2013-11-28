@@ -117,6 +117,74 @@ body {
 	background: #F5F7F9
 }
 
+.sidebar .first {
+	margin: 10px 0 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sidebar .first > li {
+	margin: 5px 10px 0 5px;
+	background: transparent;
+	display: block;
+	border-radius:2px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	transition:all .3s ease;
+	-ms-transition:all .3s ease;
+	-o-transition:all .3s ease;
+	-moz-transition:all .3s ease;
+	-webkit-transition:all .3s ease;
+}
+
+.sidebar .first > li > a {
+	height: 40px;
+	line-height: 40px;
+	color:#768294;
+	display: block;
+}
+
+.sidebar .first > li > a:hover {
+	text-decoration: none;
+}
+
+.sidebar .first > li > a > b {
+	float: left;
+	margin: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 21px;
+	color: #C2C8D1;
+	display: inline-block;
+}
+
+.sidebar .first > li:hover {
+	background: #fff;
+}
+
+.sidebar .first > li:hover > a{
+	color: #2381e9;
+}
+
+.sidebar .first > li:hover > a > b{
+	color: #A7CDF6;
+}
+
+.sidebar .first > .active:hover,
+.sidebar .first > .active {
+	background: #2381e9;
+}
+
+.sidebar .first > .active:hover > a,
+.sidebar .first > .active > a {
+	color:#fff;
+}
+
+.sidebar .first > .active:hover > a > b,
+.sidebar .first > .active > a > b{
+	color:#7BB3F2;
+}
+
 /*.sidebar .first {
 	padding:0;
 	margin:10px 0 0 5px;
