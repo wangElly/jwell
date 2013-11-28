@@ -10,6 +10,14 @@ body {
 	float:left;
 }
 
+.h {
+	display: none;
+}
+
+.s {
+	display: block;
+}
+
 .navbar-jclub {
 	border:0;
 	background-color: #343942;
@@ -114,7 +122,18 @@ body {
 	width:220px;
 	height:100%;
 	padding-top:50px;
-	background: #F5F7F9
+	background: #F0F0F0
+}
+
+.sidebar li {
+	border-radius:2px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	transition:all .5s ease;
+	-ms-transition:all .5s ease;
+	-o-transition:all .5s ease;
+	-moz-transition:all .5s ease;
+	-webkit-transition:all .5s ease;
 }
 
 .sidebar .first {
@@ -127,14 +146,6 @@ body {
 	margin: 5px 10px 0 5px;
 	background: transparent;
 	display: block;
-	border-radius:2px;
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	transition:all .3s ease;
-	-ms-transition:all .3s ease;
-	-o-transition:all .3s ease;
-	-moz-transition:all .3s ease;
-	-webkit-transition:all .3s ease;
 }
 
 .sidebar .first > li > a {
@@ -180,9 +191,73 @@ body {
 	color:#fff;
 }
 
+.sidebar .first > .selected:hover > a > b,
+.sidebar .first > .selected > a > b,
 .sidebar .first > .active:hover > a > b,
 .sidebar .first > .active > a > b{
 	color:#7BB3F2;
+}
+
+.sidebar .first > .selected:hover,
+.sidebar .first > .selected {
+	background: #fff;
+}
+
+.sidebar .first > .selected:hover > a,
+.sidebar .first > .selected > a {
+	color:#2381e9;
+}
+
+.sidebar .second {
+	margin: 0;
+	padding:0 0 5px 0;
+	list-style: none;
+}
+
+.sidebar .second > li {
+	margin: 8px;
+	padding: 5px;
+	background: transparent;
+	display: block;
+}
+
+.sidebar .second > li > a {
+	color: #a4a4a4;
+	font-size: 12px;
+	display: block;
+}
+
+.sidebar .second > li > a > b {
+	margin:0 10px;
+	color:#DBDBDB;
+}
+
+.sidebar .second > li > a:hover {
+	text-decoration: none;
+	color:#000;
+}
+
+.sidebar .second > li:hover {
+	background: #f0f0f0;
+}
+
+.sidebar .second > li:hover > a > b {
+	color:#969696;
+}
+
+.sidebar .second > .active:hover,
+.sidebar .second > .active {
+	background: #2381e9;
+}
+
+.sidebar .second > .active:hover > a,
+.sidebar .second > .active > a{
+	color: #fff;
+}
+
+.sidebar .second > .active:hover > a > b,
+.sidebar .second > .active > a > b{
+	color: #7BB3F2;
 }
 
 /*.sidebar .first {
