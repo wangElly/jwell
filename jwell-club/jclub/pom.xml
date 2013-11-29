@@ -16,7 +16,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+    
 	<build>
 		<finalName>jclub</finalName>
 	</build>
