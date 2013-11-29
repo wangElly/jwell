@@ -1,5 +1,7 @@
 package com.fenwell.jwell.spi.pojo;
 
+import java.lang.reflect.Method;
+
 import com.esotericsoftware.reflectasm.MethodAccess;
 import com.fenwell.jwell.annotation.Param;
 import com.fenwell.jwell.api.Interceptors;
@@ -14,6 +16,8 @@ public class ActionContent {
     private int methodIndex;
 
     private MethodAccess method;
+
+    private Method originalMethod;
 
     private Class<? extends Interceptors>[] interceptors;
 
@@ -75,6 +79,14 @@ public class ActionContent {
 
     public void setMethodIndex(int methodIndex) {
         this.methodIndex = methodIndex;
+    }
+
+    public Method getOriginalMethod() {
+        return originalMethod;
+    }
+
+    public void setOriginalMethod(Method originalMethod) {
+        this.originalMethod = originalMethod;
     }
 
 }

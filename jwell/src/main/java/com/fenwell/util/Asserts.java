@@ -3,7 +3,7 @@ package com.fenwell.util;
 public class Asserts {
 
     protected static final String VOID = "void";
-
+    
     /**
      * 判断class 是否为void
      * 
